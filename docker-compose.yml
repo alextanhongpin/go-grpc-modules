@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+        client:
+                build: 
+                        # We are pointing to the root directory, because this is where the go.mod, go.sum, proto and vendor resides.
+                        # Otherwise, it is possible to set the build to point directly to the client directory, e.g. build: ./client.
+                        context: .
+                        dockerfile: ./client/Dockerfile
+                image: grpcconsul/client
+                depends_on: 
+                        - server # The server needs to be up before the client can connect.
+                environment:
+                        - SERVER_HOST=server:50051
+        server:
+                build: 
+                        context: .
+                        dockerfile: ./server/Dockerfile
+                image: grpcconsul/server
+                        
